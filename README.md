@@ -1,3 +1,53 @@
+! Variáveis para a validação do CPF
+CPF    STRING(11)  ! CPF recebido sem formatação
+Soma   LONG
+Resto  BYTE
+I      BYTE
+
+! Verifica se o CPF possui 11 dígitos e se não é uma sequência repetida
+IF LEN(CLIP(CPF)) <> 11 OR CPF = '00000000000' OR CPF = '11111111111' OR CPF = '22222222222' OR CPF = '33333333333' OR CPF = '44444444444' OR CPF = '55555555555' OR CPF = '66666666666' OR CPF = '77777777777' OR CPF = '88888888888' OR CPF = '99999999999'
+    MESSAGE('CPF inválido!')
+    RETURN
+END
+
+! Validação do primeiro dígito verificador
+Soma = 0
+FOR I = 1 TO 9
+    Soma += VAL(SUB(CPF, I, 1)) * (11 - I)
+END
+Resto = (Soma * 10) % 11
+IF Resto = 10 OR Resto = 11
+    Resto = 0
+END
+IF Resto <> VAL(SUB(CPF, 10, 1))
+    MESSAGE('CPF inválido!')
+    RETURN
+END
+
+! Validação do segundo dígito verificador
+Soma = 0
+FOR I = 1 TO 10
+    Soma += VAL(SUB(CPF, I, 1)) * (12 - I)
+END
+Resto = (Soma * 10) % 11
+IF Resto = 10 OR Resto = 11
+    Resto = 0
+END
+IF Resto <> VAL(SUB(CPF, 11, 1))
+    MESSAGE('CPF inválido!')
+    RETURN
+END
+
+! Se chegou até aqui, o CPF é válido
+MESSAGE('CPF válido!')
+
+
+
+
+
+
+
+
 # Reuti
 function validarCPF(cpf) {
     cpf = cpf.replace(/[^\d]+/g, ''); // Remove tudo que não é número
